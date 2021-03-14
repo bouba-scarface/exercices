@@ -14,3 +14,6 @@ const literalDigits = [
   "eight",
   "nine",
 ];
+for(let i=(literalDigits.length -1); i>=0; i--){
+  console.log(literalDigits[i]);
+}

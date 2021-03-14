@@ -12,3 +12,12 @@
 // **********
 // **********
 // ```
+
+const rectangle =[];
+for(let i=0; i<10; i++){
+  rectangle.push("**********");
+}
+
+for(let i=0; i<10; i++){
+  console.log(rectangle[i]);
+}
