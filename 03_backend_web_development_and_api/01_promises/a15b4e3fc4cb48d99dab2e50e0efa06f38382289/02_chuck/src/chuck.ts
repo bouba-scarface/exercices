@@ -2,15 +2,13 @@ import { getChuckCategories, getChuckJoke } from "../utils";
 
 function getCategories(): Promise<string[]> {
   // Your code goes here
-  return new Promise((resolve) => {
-    resolve(getChuckCategories().then());
-  });
+  return getChuckCategories();
 }
 
 function getJoke(category: string): Promise<string> {
   // Your code goes here
-  return new Promise((resolve) => {
-    resolve(getChuckJoke(category).then((response) => response.value));
+  return getChuckJoke(category).then((joke) => {
+    return joke.value;
   });
 }
 

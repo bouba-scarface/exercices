@@ -1,0 +1,3 @@
+01_test_curl.sh       
+02_test_jq.sh          
+03_querying_with_jq.sh
