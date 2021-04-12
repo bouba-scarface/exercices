@@ -14,26 +14,34 @@ export type GitHub = {
 
 export class GithubClient {
   static getReposUrl(nickname: string): Promise<string> {
-    return getReposUrlByNickname(nickname)
-      .then((response) => {
+    return getReposUrlByNickname(nickname).then((response) => {
+      if (response.message === "Not Found") {
+        return `${nickname}${response.message}`;
+      } else {
         return response.repos_url;
-      })
-      .catch((error) => {
-        return error.message;
-      });
+      }
+    });
   }
 
   static getRepos(url: string): Promise<Repo[]> {
     return listRepos(url);
   }
 
-  static printRepos(Repos: Repo[]): void {
+  static printRepos(Repo: Repo[]): Repo[] {
     // You code goes here
-    return Repos.forEach((element) => console.log(element));
+    Repo.forEach((element, index) => {
+      console.log(`${index + 1}-${element.name}`);
+    });
+    return Repo;
   }
 
-  static printRepository(Repo: Repo): void {
-    console.log(`${getOneRepoInfos(Repo)}`);
+  static printRepository(ref: Repo): void {
+    console.log(ref.name);
+    console.log(ref.description);
+    console.log(ref.subscribers_count);
+    console.log(ref.stargazers_count);
+    console.log(ref.language);
+    console.log(ref.url);
   }
 
   static getProjectInformations(url: string): Promise<Repo> {
