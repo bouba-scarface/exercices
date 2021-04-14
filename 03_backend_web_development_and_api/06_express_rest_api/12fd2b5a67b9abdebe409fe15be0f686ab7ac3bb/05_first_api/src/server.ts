@@ -29,11 +29,7 @@ app.get("/games/:game_slug", (request: Request, response: Response) => {
     response.status(404).end();
   }
 });
-type Jeux = {
-  name: string;
-  slug: string;
-  platform_logo_url: string;
-};
+
 app.get("/platforms/:platform_slug", (request: Request, response: Response) => {
   const game = games.filter((element) => {
     if (request.params.platform_slug === element.platform.slug) {
@@ -54,13 +50,13 @@ app.get("/platforms/:platform_slug", (request: Request, response: Response) => {
 app.get("/platforms", (request: Request, response: Response) => {
   const game = games.map((element) => {
     return {
-      name: element.platform.name,
-      slug: element.platform.slug,
+      name: element.name,
+      slug: element.slug,
     };
   });
-  Array.from(new Set(game));
+  //const conv = new Set(game);
   if (game) {
-    response.status(200).json(game).end();
+    response.status(200).json(game);
   } else {
     response.status(404).end();
   }
