@@ -19,7 +19,7 @@ export class GameModel {
 
   getAll(): Game[] {
     return this.collection.map((element) => {
-      return { name: element.name, slug: element.slug, cover: element.cover };
+      return { name: element.name, slug: element.slug, cover: element.cover_url };
     });
   }
 
@@ -50,16 +50,20 @@ export class GameModel {
     });
   }
 
-
-  //Utilisé reduce(accumulateur, element)
   getPlatforms(): Platform[] {
-    //trier le tableau
-    const games= this.collection.map((element) => {
-      return {
-        name: element.name,
-        slug: element.slug,
-      };
+    const result: Platform[] = [];
+    this.collection.forEach((game) => {
+      if (
+        result.find((platform) => {
+          return game.platform.slug === platform.slug;
+        }) === undefined
+      ) {
+        result.push({
+          name: game.platform.name,
+          slug: game.platform.slug,
+        });
+      }
     });
-    //recuperer le slug objet
+    return result;
   }
 }
