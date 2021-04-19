@@ -27,26 +27,22 @@ const testOptions = {
   useNewUrlParser: true,
   useUnifiedTopology: true,
   connectTimeoutMS: 5000,
-  serverSelectionTimeoutMS: 5000
+  serverSelectionTimeoutMS: 5000,
 };
 
 async function initTestDatabase(): Promise<mongoDb.MongoClient> {
   return new Promise((resolve, reject) => {
-    mongoDb.MongoClient.connect(
-      testDatabaseUrl,
-      testOptions,
-      async (error, client) => {
-        if (error) {
-          reject(error);
-        } else {
-          resolve(client);
-        }
+    mongoDb.MongoClient.connect(testDatabaseUrl, testOptions, async (error, client) => {
+      if (error) {
+        reject(error);
+      } else {
+        resolve(client);
       }
-    );
+    });
   });
 }
 
-jest.setTimeout(20000)
+jest.setTimeout(20000);
 
 describe("DB utils", () => {
   let client: mongoDb.MongoClient;
@@ -56,20 +52,20 @@ describe("DB utils", () => {
     try {
       client = await initTestDatabase();
       db = client.db();
-    } catch(error) {
+    } catch (error) {
       console.log("Can't log to MongoDB Server, did you start it?");
     }
   });
   beforeEach(async () => {
     if (db) {
       await dropAll(db);
-      const userCollection = await db.createCollection<User>("users")
+      const userCollection = await db.createCollection<User>("users");
       await userCollection.insertMany(users);
     }
-  })
+  });
   afterAll(async () => {
     if (db) {
-      await dropAll(db)
+      await dropAll(db);
     }
     if (client) {
       await client.close();
@@ -104,27 +100,17 @@ describe("DB utils", () => {
 
   describe("#createCollectionWithValidator", () => {
     it("Should create a collection including a validator", async () => {
-      await createCollectionWithValidator<Book>(
-        db,
-        "books",
-        booksValidator
-      ).then(async (collection) => {
+      await createCollectionWithValidator<Book>(db, "books", booksValidator).then(async (collection) => {
         const expectedKeys = ["_id", "title", "author", "description"];
         const validator = await collection.options();
 
         expect(collection.namespace).toMatch("books");
-        expect(Object.keys(validator.validator.$jsonSchema.properties)).toEqual(
-          expectedKeys
-        );
+        expect(Object.keys(validator.validator.$jsonSchema.properties)).toEqual(expectedKeys);
       });
     });
 
     it("Should return a promise of a mongo collection", async () => {
-      const collectionPromise = createCollectionWithValidator<Book>(
-        db,
-        "books",
-        booksValidator
-      );
+      const collectionPromise = createCollectionWithValidator<Book>(db, "books", booksValidator);
 
       expect(collectionPromise instanceof Promise).toBe(true);
 
@@ -164,21 +150,13 @@ describe("DB utils", () => {
 
   describe("#renameCollection", () => {
     it("Should rename properly the collection in the given database", async () => {
-      const renamedCollection = await renameCollection(
-        db,
-        "users",
-        "registeredUsers"
-      );
+      const renamedCollection = await renameCollection(db, "users", "registeredUsers");
 
       expect(renamedCollection.namespace).toMatch("registeredUsers");
     });
 
     it("Should return a promise of a mongo collection", async () => {
-      const collectionPromise = renameCollection(
-        db,
-        "users",
-        "registeredUsers"
-      );
+      const collectionPromise = renameCollection(db, "users", "registeredUsers");
 
       expect(collectionPromise instanceof Promise).toBe(true);
 
@@ -312,10 +290,7 @@ describe("DB utils", () => {
 
       const usersCollection = db.collection("users");
 
-      const documentsPromise = insertManyDocuments<User>(
-        usersCollection,
-        bunchOfUsers
-      );
+      const documentsPromise = insertManyDocuments<User>(usersCollection, bunchOfUsers);
 
       expect(documentsPromise instanceof Promise).toBe(true);
 
@@ -389,11 +364,7 @@ describe("DB utils", () => {
     it("Should update the document in the given collection", async () => {
       const usersCollection = await db.collection("users");
 
-      await updateOneDocument<User>(
-        usersCollection,
-        { firstName: "Jean" },
-        { $set: { firstName: "Jeanno" } }
-      );
+      await updateOneDocument<User>(usersCollection, { firstName: "Jean" }, { $set: { firstName: "Jeanno" } });
 
       const updatedUser = await usersCollection.findOne({
         firstName: "Jeanno",
@@ -414,7 +385,7 @@ describe("DB utils", () => {
       const documentPromise = updateOneDocument<User>(
         usersCollection,
         { firstName: "Jean" },
-        { $set: { firstName: "Jeanno" } }
+        { $set: { firstName: "Jeanno" } },
       );
 
       expect(documentPromise instanceof Promise).toBe(true);
@@ -438,11 +409,7 @@ describe("DB utils", () => {
     it("Should update the bunch of documents in the given collection", async () => {
       const usersCollection = await db.collection("users");
 
-      await updateManyDocuments<User>(
-        usersCollection,
-        { age: 20 },
-        { $set: { age: 25 } }
-      );
+      await updateManyDocuments<User>(usersCollection, { age: 20 }, { $set: { age: 25 } });
 
       const updatedUsers = await usersCollection
         .find({
@@ -458,11 +425,7 @@ describe("DB utils", () => {
     it("Should return a promise of an array of the updated documents", async () => {
       const usersCollection = await db.collection("users");
 
-      const documentsPromise = updateManyDocuments<User>(
-        usersCollection,
-        { age: 20 },
-        { $set: { age: 25 } }
-      );
+      const documentsPromise = updateManyDocuments<User>(usersCollection, { age: 20 }, { $set: { age: 25 } });
 
       expect(documentsPromise instanceof Promise).toBe(true);
 
@@ -487,17 +450,11 @@ describe("DB utils", () => {
           expect(Object.keys(user).sort()).toEqual(expectedKeys.sort());
         });
 
-        expect(Object.values(returnedUsers[0])).toEqual(
-          expect.arrayContaining(expectedValues0)
-        );
+        expect(Object.values(returnedUsers[0])).toEqual(expect.arrayContaining(expectedValues0));
 
-        expect(Object.values(returnedUsers[1])).toEqual(
-          expect.arrayContaining(expectedValues1)
-        );
+        expect(Object.values(returnedUsers[1])).toEqual(expect.arrayContaining(expectedValues1));
 
-        expect(Object.values(returnedUsers[2])).toEqual(
-          expect.arrayContaining(expectedValues2)
-        );
+        expect(Object.values(returnedUsers[2])).toEqual(expect.arrayContaining(expectedValues2));
       });
     });
 
