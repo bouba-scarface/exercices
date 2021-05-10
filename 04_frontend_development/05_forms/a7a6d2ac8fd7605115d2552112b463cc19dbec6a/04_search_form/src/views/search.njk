@@ -1,0 +1,10 @@
+{% extends "layout.njk" %} {% block content %}
+<h1>Games</h1>
+<ul class="list-group">
+  {% for game in games %}
+  <li class="list-group-item">
+    <a href="/games/{{ game.slug }}">{{ game.name }}</a>
+  </li>
+  {% endfor %}
+</ul>
+{% endblock %}

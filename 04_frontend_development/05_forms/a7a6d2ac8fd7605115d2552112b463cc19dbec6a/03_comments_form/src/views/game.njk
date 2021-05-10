@@ -1,0 +1,41 @@
+{% extends "layout.njk" %} {% block css %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+<link rel="stylesheet" href="/assets/style.css" />
+{% endblock %} {% block content %}
+<h1>{{ game.name }}</h1>
+
+<p>{{ game.summary }}</p>
+
+<img src="{{ game.cover_url }}" />
+<br />
+<br />
+<form action="/games/{{ game.slug }}/comments" method="post">
+  <div class="mb-3">
+    <input
+      type="text"
+      class="form-control"
+      name="userName"
+      id="exampleFormControlInput1"
+      placeholder="Enter your name"
+    />
+  </div>
+  <div class="mb-3">
+    <label for="exampleFormControlTextarea1" class="form-label">your comment</label>
+    <textarea class="form-control" name="comment" id="exampleFormControlTextarea1" rows="3"></textarea>
+  </div>
+  <div class="d-grid gap-2">
+    <button class="btn btn-primary" type="submit">Send</button>
+  </div>
+</form>
+
+<br />
+{% for comment in game.comments %}
+<span>
+  <i class="fas fa-user" style="font-size: 25px; border: 1px solid; color: rgb(59, 110, 158)"></i>
+</span>
+
+<span>{{ comment.name }} </span>
+
+<p style="font-size: 1em; padding: 8px; border: 1px solid">{{ comment.comment }}</p>
+
+{% endfor %} {% endblock %}

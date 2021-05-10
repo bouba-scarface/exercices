@@ -1,0 +1,20 @@
+{% extends "layout.njk" %} {% block content %}
+<nav class="navbar navbar-light bg-light">
+  <div class="container-fluid">
+    <a class="navbar-brand"><h1>Games</h1></a>
+    <form class="d-flex" method="post" action="/search">
+      <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="search"/>
+      <button class="btn btn-outline-success" type="submit">Search</button>
+    </form>
+  </div>
+</nav>
+
+<ul>
+  {% for game in games %}
+  <li>
+    <a href="/games/{{ game.slug }}">{{ game.name }}</a>
+  </li>
+  {% endfor %}
+</ul>
+
+{% endblock %}
