@@ -1,0 +1,40 @@
+{% extends "layout.njk" %} {% block css %} <link rel="stylesheet" href="/assets/css/style.css" />
+{% endblock %} {% block content %}
+<div class="container">
+  <h1 class="text-center">Games</h1>
+  <div class="row justify-content-md-center">
+    <div class="card mb-3" style="max-width: 540px">
+      <div class="row g-0">
+        {% for game in games %}
+
+        <div class="col-md-4">
+          <img src="{{ game.cover }}" alt="..." />
+        </div>
+        <div class="col-md-8">
+          <div class="card-body">
+            <a class="card-title" href="games/{{ game.slug }}">{{ game.name }}</a>
+          </div>
+        </div>
+
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- <section>
+  <div class="container">
+    <h1>Games</h1>
+
+    {% for game in games %}
+    <div>
+      <img src="{{ game.cover }}" alt="" />
+
+      <a href="games/{{ game.slug }}">{{ game.name }}</a>
+    </div>
+
+    {% endfor %}
+  </div>
+</section> -->
+
+{% endblock %}
